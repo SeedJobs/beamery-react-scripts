@@ -1,10 +1,10 @@
 {
-  "name": "react-scripts",
-  "version": "3.0.1",
+  "name": "@beamery/react-scripts",
+  "version": "3.0.1-b",
   "description": "Configuration and scripts for Create React App.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/facebook/create-react-app.git",
+    "url": "https://github.com/SeedJobs/create-react-app",
     "directory": "packages/react-scripts"
   },
   "license": "MIT",
@@ -12,7 +12,7 @@
     "node": ">=8.10"
   },
   "bugs": {
-    "url": "https://github.com/facebook/create-react-app/issues"
+    "url": "https://github.com/SeedJobs/create-react-app/issues"
   },
   "files": [
     "bin",
@@ -25,6 +25,10 @@
   ],
   "bin": {
     "react-scripts": "./bin/react-scripts.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://verdaccio.support.beamery.com"
   },
   "types": "./lib/react-app.d.ts",
   "dependencies": {

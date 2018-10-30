@@ -95,6 +95,7 @@ function verifyTypeScriptSetup() {
     // These are suggested values and will be set when not present in the
     // tsconfig.json
     // 'parsedValue' matches the output value from ts.parseJsonConfigFileContent()
+    baseUrl: { value: 'src' },
     target: {
       parsedValue: ts.ScriptTarget.ES5,
       suggested: 'es5',
@@ -213,8 +214,8 @@ function verifyTypeScriptSetup() {
       messages.push(
         `${coloredOption} ${chalk.bold(
           valueToCheck == null ? 'must not' : 'must'
-        )} be ${valueToCheck == null ? 'set' : chalk.cyan.bold(value)}` +
-          (reason != null ? ` (${reason})` : '')
+          )} be ${valueToCheck == null ? 'set' : chalk.cyan.bold(value)}` +
+            (reason != null ? ` (${reason})` : '')
       );
     }
   }
@@ -257,7 +258,7 @@ function verifyTypeScriptSetup() {
   if (!fs.existsSync(paths.appTypeDeclarations)) {
     fs.writeFileSync(
       paths.appTypeDeclarations,
-      `/// <reference types="react-scripts" />${os.EOL}`
+      `/// <reference types="@beamery/react-scripts" />${os.EOL}`
     );
   }
 }
