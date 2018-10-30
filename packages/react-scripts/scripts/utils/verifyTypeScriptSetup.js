@@ -251,7 +251,7 @@ function verifyTypeScriptSetup() {
   if (!fs.existsSync(paths.appTypeDeclarations)) {
     fs.writeFileSync(
       paths.appTypeDeclarations,
-      `/// <reference types="react-scripts" />${os.EOL}`
+      `/// <reference types="@beamery/react-scripts" />${os.EOL}`
     );
   }
 }

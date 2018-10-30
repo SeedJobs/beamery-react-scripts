@@ -1,6 +1,6 @@
 'use strict';
 
-const paths = require('./paths');
+const paths = require('../paths');
 
 // Use the `package.json` app name to simplify setup.
 const appName = paths.appPackageJson.name;
