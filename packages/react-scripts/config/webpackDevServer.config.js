@@ -60,12 +60,17 @@ module.exports = function(proxy, allowedHost) {
     contentBase: paths.appPublic,
     // By default files from `contentBase` will not trigger a page reload.
     watchContentBase: true,
+    // Write bundle to disk if development mode
+    writeToDisk:
+      process.env.BMR_ENV === 'development'
+        ? filePath => !filePath.includes('index.html')
+        : false,
     // Enable hot reloading server. It will provide /sockjs-node/ endpoint
     // for the WebpackDevServer client so it can learn when the files were
     // updated. The WebpackDevServer client is included as an entry point
     // in the Webpack development configuration. Note that only changes
     // to CSS are currently hot reloaded. JS changes will refresh the browser.
-    hot: true,
+    hot: process.env.BMR_ENV !== 'development',
     // It is important to tell WebpackDevServer to use the same "root" path
     // as we specified in the config. In development, we always serve from /.
     publicPath: '/',

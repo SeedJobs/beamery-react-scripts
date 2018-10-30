@@ -16,6 +16,7 @@ const paths = require('../../config/paths');
 const os = require('os');
 const immer = require('react-dev-utils/immer').produce;
 const globby = require('react-dev-utils/globby').sync;
+const beameryOptions = require('../beamery/typescript');
 
 function writeJson(fileName, object) {
   fs.writeFileSync(
@@ -91,7 +92,7 @@ function verifyTypeScriptSetup() {
     process.exit(1);
   }
 
-  const compilerOptions = {
+  const compilerOptions = beameryOptions({
     // These are suggested values and will be set when not present in the
     // tsconfig.json
     // 'parsedValue' matches the output value from ts.parseJsonConfigFileContent()
@@ -130,7 +131,7 @@ function verifyTypeScriptSetup() {
       reason: 'JSX is compiled by Babel',
     },
     paths: { value: undefined, reason: 'aliased imports are not supported' },
-  };
+  });
 
   const formatDiagnosticHost = {
     getCanonicalFileName: fileName => fileName,
@@ -213,8 +214,9 @@ function verifyTypeScriptSetup() {
       messages.push(
         `${coloredOption} ${chalk.bold(
           valueToCheck == null ? 'must not' : 'must'
-        )} be ${valueToCheck == null ? 'set' : chalk.cyan.bold(value)}` +
-          (reason != null ? ` (${reason})` : '')
+        )} be ${
+          valueToCheck == null ? 'set' : chalk.cyan.bold(JSON.stringify(value))
+        }` + (reason != null ? ` (${reason})` : '')
       );
     }
   }
@@ -257,7 +259,7 @@ function verifyTypeScriptSetup() {
   if (!fs.existsSync(paths.appTypeDeclarations)) {
     fs.writeFileSync(
       paths.appTypeDeclarations,
-      `/// <reference types="react-scripts" />${os.EOL}`
+      `/// <reference types="@beamery/react-scripts" />${os.EOL}`
     );
   }
 }
