@@ -191,38 +191,34 @@ module.exports = function(
   if (!isReactInstalled(appPackage) || template) {
     console.log(`Installing react and react-dom using ${command}...`);
     console.log();
-    args = args.concat(['react', 'react-dom']);
 
-    const proc = spawn.sync(command, args, { stdio: 'inherit' });
+    const proc = spawn.sync(command, args.concat(['react', 'react-dom']), {
+      stdio: 'inherit',
+    });
     if (proc.status !== 0) {
       console.error(`\`${command} ${args.join(' ')}\` failed`);
       return;
     }
   }
 
+  // @beamery/react-scripts start
   // Install single-spa-react for Beamery's templates.
-  console.log(`Installing single-spa-react using ${command}...`);
-  console.log();
+  if ((appPackage.dependencies || {})['single-spa-react'] !== 'undefined') {
+    console.log(`Installing single-spa-react using ${command}...`);
+    console.log();
+    const _args = args.concat(['single-spa-react']);
 
-  const proc = spawn.sync(command, args.concat(['single-spa-react']), {
-    stdio: 'inherit',
-  });
-  if (proc.status !== 0) {
-    console.error(`\`${command} ${args.join(' ')}\` failed`);
-    return;
-  }
+    if (useTypeScript) {
+      _args.push('@types/single-spa-react');
+    }
 
-  if (useTypeScript) {
-    const proc = spawn.sync(
-      command,
-      args.concat(['@types/single-spa-react', '-D']),
-      { stdio: 'inherit' }
-    );
+    const proc = spawn.sync(command, _args, { stdio: 'inherit' });
     if (proc.status !== 0) {
       console.error(`\`${command} ${args.join(' ')}\` failed`);
       return;
     }
   }
+  // @beamery/react-scripts end
 
   if (useTypeScript) {
     verifyTypeScriptSetup();

@@ -1,6 +1,6 @@
 {
   "name": "@beamery/react-scripts",
-  "version": "2.1.0",
+  "version": "2.1.0-b",
   "description": "Configuration and scripts for Create React App.",
   "repository": "SeedJobs/create-react-app",
   "license": "MIT",
