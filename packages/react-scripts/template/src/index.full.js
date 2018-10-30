@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import App from './App';
 
-const appName = process.env.BMR_APP_NAME;
+const appName = process.env.BMR_APP_NAME || 'app-name';
 
 function domElementGetter() {
   // Make sure there is a `div` for us to render to.
@@ -30,16 +30,16 @@ const app = singleSpaReact({
   rootComponent: App,
 });
 
-export function bootstrap(props) {
-  return app.bootstrap(props);
+export function bootstrap(options) {
+  return app.bootstrap(options);
 }
 
-export function mount(props) {
-  return app.mount(props);
+export function mount(options) {
+  return app.mount(options);
 }
 
-export function unmount(props) {
-  return app.unmount(props);
+export function unmount(options) {
+  return app.unmount(options);
 }
 
 window.bmr = window.bmr || {};

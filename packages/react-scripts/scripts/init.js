@@ -95,15 +95,15 @@ module.exports = function(
 
   // Setup the script rules
   appPackage.scripts = {
-    'start': 'BMR_ENV=development react-scripts start',
+    start: 'BMR_ENV=development react-scripts start',
     'start-standalone': 'react-scripts start',
-    'build': 'BMR_ENV=production react-scripts build',
+    build: 'BMR_ENV=production react-scripts build',
     'build-dev': 'BMR_ENV=development react-scripts build',
     'build-staging': 'BMR_ENV=staging react-scripts build',
-    'test': 'react-scripts test',
+    test: 'react-scripts test',
     'test-coverage': 'react-scripts test --coverage',
     'test-watch': 'react-scripts test --watch',
-    'eject': 'react-scripts eject',
+    eject: 'react-scripts eject',
   };
 
   // Setup the eslint config
@@ -169,7 +169,6 @@ module.exports = function(
     command = 'npm';
     args = ['install', '--save', verbose && '--verbose'].filter(e => e);
   }
-  args.push('react', 'react-dom');
 
   // Install additional template dependencies, if present
   const templateDependenciesPath = path.join(
@@ -192,8 +191,33 @@ module.exports = function(
   if (!isReactInstalled(appPackage) || template) {
     console.log(`Installing react and react-dom using ${command}...`);
     console.log();
+    args = args.concat(['react', 'react-dom']);
 
     const proc = spawn.sync(command, args, { stdio: 'inherit' });
+    if (proc.status !== 0) {
+      console.error(`\`${command} ${args.join(' ')}\` failed`);
+      return;
+    }
+  }
+
+  // Install single-spa-react for Beamery's templates.
+  console.log(`Installing single-spa-react using ${command}...`);
+  console.log();
+
+  const proc = spawn.sync(command, args.concat(['single-spa-react']), {
+    stdio: 'inherit',
+  });
+  if (proc.status !== 0) {
+    console.error(`\`${command} ${args.join(' ')}\` failed`);
+    return;
+  }
+
+  if (useTypeScript) {
+    const proc = spawn.sync(
+      command,
+      args.concat(['@types/single-spa-react', '-D']),
+      { stdio: 'inherit' }
+    );
     if (proc.status !== 0) {
       console.error(`\`${command} ${args.join(' ')}\` failed`);
       return;

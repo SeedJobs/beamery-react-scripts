@@ -11,7 +11,7 @@
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
-const beameryPaths = ('./beamery/paths');
+const beameryPaths = require('./beamery/paths');
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
@@ -43,7 +43,9 @@ const getPublicUrl = appPackageJson =>
 function getServedPath(appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson);
   const servedUrl =
-    beameryPaths.publicPath || envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : '/');
+    beameryPaths.publicPath ||
+    envPublicUrl ||
+    (publicUrl ? url.parse(publicUrl).pathname : '/');
   return ensureSlash(servedUrl, true);
 }
 
