@@ -79,7 +79,16 @@ checkBrowsers(paths.appPath, isInteractive)
   .then(previousFileSizes => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(paths.appBuild);
+    // fs.emptyDirSync(paths.appBuild);
+
+    // Beamery cleanup
+    fs.removeSync(
+      path.resolve(paths.appBuild, process.env.APP_NAME + '.main.bundle.js')
+    );
+    fs.removeSync(
+      path.resolve(paths.appBuild, process.env.APP_NAME + '.main.bundle.js.map')
+    );
+
     // Merge with the public folder
     copyPublicFolder();
     // Start the webpack build
