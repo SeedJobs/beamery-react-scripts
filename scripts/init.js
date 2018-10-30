@@ -22,6 +22,7 @@ const spawn = require('react-dev-utils/crossSpawn');
 const { defaultBrowsers } = require('react-dev-utils/browsersHelper');
 const os = require('os');
 const verifyTypeScriptSetup = require('./utils/verifyTypeScriptSetup');
+const beameryInit = require('./beamery/init');
 
 function isInGitRepository() {
   try {
@@ -164,7 +165,6 @@ module.exports = function(
     command = 'npm';
     args = ['install', '--save', verbose && '--verbose'].filter(e => e);
   }
-  args.push('react', 'react-dom');
 
   // Install additional template dependencies, if present
   const templateDependenciesPath = path.join(
@@ -188,12 +188,16 @@ module.exports = function(
     console.log(`Installing react and react-dom using ${command}...`);
     console.log();
 
-    const proc = spawn.sync(command, args, { stdio: 'inherit' });
+    const proc = spawn.sync(command, args.concat(['react', 'react-dom']), {
+      stdio: 'inherit',
+    });
     if (proc.status !== 0) {
       console.error(`\`${command} ${args.join(' ')}\` failed`);
       return;
     }
   }
+
+  beameryInit(appPath, args, command, useTypeScript);
 
   if (useTypeScript) {
     verifyTypeScriptSetup();
@@ -225,6 +229,13 @@ module.exports = function(
   console.log('    Starts the development server.');
   console.log();
   console.log(
+    chalk.cyan(
+      `  ${displayedCommand} ${useYarn ? '' : 'run '}start-independent`
+    )
+  );
+  console.log('    Starts the development server in independent mode.');
+  console.log();
+  console.log(
     chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`)
   );
   console.log('    Bundles the app into static files for production.');
@@ -245,7 +256,9 @@ module.exports = function(
   console.log('We suggest that you begin by typing:');
   console.log();
   console.log(chalk.cyan('  cd'), cdpath);
-  console.log(`  ${chalk.cyan(`${displayedCommand} start`)}`);
+  console.log(
+    `  ${displayedCommand} ${useYarn ? '' : 'run '}start-independent`
+  );
   if (readmeExists) {
     console.log();
     console.log(
