@@ -221,6 +221,17 @@ function verifyTypeScriptSetup() {
     );
   }
 
+  // bmr-react-scripts start
+  if (parsedTsConfig.baseUrl == null) {
+    appTsConfig.baseUrl = '.';
+  }
+  if (parsedTsConfig.paths == null) {
+    appTsConfig.paths = {
+      '*': ['./src/*'],
+    };
+  }
+  // bmr-react-scripts end
+
   if (messages.length > 0) {
     if (firstTimeSetup) {
       console.log(

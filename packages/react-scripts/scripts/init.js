@@ -22,6 +22,7 @@ const spawn = require('react-dev-utils/crossSpawn');
 const { defaultBrowsers } = require('react-dev-utils/browsersHelper');
 const os = require('os');
 const verifyTypeScriptSetup = require('./utils/verifyTypeScriptSetup');
+const beameryInit = require('./beamery/init');
 
 function isInGitRepository() {
   try {
@@ -97,9 +98,11 @@ module.exports = function(
   appPackage.scripts = {
     start: 'BMR_ENV=development react-scripts start',
     'start-standalone': 'react-scripts start',
+    storybook: 'start-storybook -p 3001',
     build: 'BMR_ENV=production react-scripts build',
     'build-dev': 'BMR_ENV=development react-scripts build',
     'build-staging': 'BMR_ENV=staging react-scripts build',
+    'build-storybook': 'build-storybook',
     test: 'react-scripts test',
     'test-coverage': 'react-scripts test --coverage',
     'test-watch': 'react-scripts test --watch',
@@ -113,6 +116,13 @@ module.exports = function(
 
   // Setup the browsers list
   appPackage.browserslist = defaultBrowsers;
+
+  // bmr-react-scripts start
+  // Set the stylelint config.
+  appPackage.stylelint = {
+    extends: 'stylelint-config-recommended',
+  };
+  // bmr-react-scripts end
 
   fs.writeFileSync(
     path.join(appPath, 'package.json'),
@@ -201,24 +211,7 @@ module.exports = function(
     }
   }
 
-  // bmr-react-scripts start
-  // Install single-spa-react for Beamery's templates.
-  if ((appPackage.dependencies || {})['single-spa-react'] !== 'undefined') {
-    console.log(`Installing single-spa-react using ${command}...`);
-    console.log();
-    const _args = args.concat(['single-spa-react']);
-
-    if (useTypeScript) {
-      _args.push('@types/single-spa-react');
-    }
-
-    const proc = spawn.sync(command, _args, { stdio: 'inherit' });
-    if (proc.status !== 0) {
-      console.error(`\`${command} ${args.join(' ')}\` failed`);
-      return;
-    }
-  }
-  // bmr-react-scripts end
+  beameryInit(appPackage, args, command, spawn, useTypeScript);
 
   if (useTypeScript) {
     verifyTypeScriptSetup();
@@ -250,6 +243,11 @@ module.exports = function(
   console.log('    Starts the development server.');
   console.log();
   console.log(
+    chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}start-standalone`)
+  );
+  console.log('    Starts the development server in standalone mode.');
+  console.log();
+  console.log(
     chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`)
   );
   console.log('    Bundles the app into static files for production.');
@@ -270,7 +268,7 @@ module.exports = function(
   console.log('We suggest that you begin by typing:');
   console.log();
   console.log(chalk.cyan('  cd'), cdpath);
-  console.log(`  ${chalk.cyan(`${displayedCommand} start`)}`);
+  console.log(`  ${displayedCommand} ${useYarn ? '' : 'run '}start-standalone`);
   if (readmeExists) {
     console.log();
     console.log(
