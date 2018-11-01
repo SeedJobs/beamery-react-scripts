@@ -25,6 +25,7 @@ Releases need to be manually created. Currently the following CRA releases are a
 | Beamery release | CRA release |
 | --------------- | ----------- |
 | `v2.1.0-a`      | `v2.1.0`    |
+| `v2.1.1-a`      | `v2.1.1`    |
 
 ### A note on package `name`
 

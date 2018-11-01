@@ -222,12 +222,12 @@ function verifyTypeScriptSetup() {
   }
 
   // bmr-react-scripts start
-  if (parsedTsConfig.baseUrl == null) {
+  if (parsedTsConfig.compilerOptions.baseUrl == null) {
     appTsConfig.baseUrl = '.';
   }
-  if (parsedTsConfig.paths == null) {
+  if (parsedTsConfig.compilerOptions.paths == null) {
     appTsConfig.paths = {
-      '*': ['./src/*'],
+      '*': ['src/*'],
     };
   }
   // bmr-react-scripts end

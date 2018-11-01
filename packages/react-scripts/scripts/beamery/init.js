@@ -29,6 +29,6 @@ module.exports = function(appPackage, args, command, spawn, useTypeScript) {
     addDependencies(dependencies);
   }
   if (devDependencies.length) {
-    addDependencies(devDependencies);
+    addDependencies(devDependencies, true);
   }
 };
