@@ -5,6 +5,7 @@ const DEPENDENCIES = ['single-spa-react'];
 const DEPENDENCIES_TYPES = DEPENDENCIES.concat(['@types/single-spa-react']);
 
 const DEV_DEPENDENCIES = [
+  // For Storybook
   '@babel/core',
   '@storybook/addon-actions',
   '@storybook/addon-knobs',
@@ -12,6 +13,8 @@ const DEV_DEPENDENCIES = [
   '@storybook/addons',
   '@storybook/react',
   'babel-loader',
+  'node-sass',
+  // For Stylelint
   'stylelint-config-recommended',
   'stylelint',
 ];
