@@ -16,6 +16,7 @@ const paths = require('../../config/paths');
 const os = require('os');
 const immer = require('react-dev-utils/immer').produce;
 const globby = require('react-dev-utils/globby').sync;
+const beameryOptions = require('../beamery/typescript');
 
 function writeJson(fileName, object) {
   fs.writeFileSync(fileName, JSON.stringify(object, null, 2) + os.EOL);
@@ -187,7 +188,7 @@ function verifyTypeScriptSetup() {
     firstTimeSetup = true;
   }
 
-  for (const option of Object.keys(compilerOptions)) {
+  for (const option of Object.keys(beameryOptions(compilerOptions))) {
     const { parsedValue, value, suggested, reason } = compilerOptions[option];
 
     const valueToCheck = parsedValue === undefined ? value : parsedValue;
@@ -220,17 +221,6 @@ function verifyTypeScriptSetup() {
       `${chalk.cyan('include')} should be ${chalk.cyan.bold('src')}`
     );
   }
-
-  // bmr-react-scripts start
-  if (parsedTsConfig.compilerOptions.baseUrl == null) {
-    appTsConfig.baseUrl = '.';
-  }
-  if (parsedTsConfig.compilerOptions.paths == null) {
-    appTsConfig.paths = {
-      '*': ['src/*'],
-    };
-  }
-  // bmr-react-scripts end
 
   if (messages.length > 0) {
     if (firstTimeSetup) {

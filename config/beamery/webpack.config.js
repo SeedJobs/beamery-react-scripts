@@ -10,6 +10,6 @@ module.exports = {
   // Webpack allows us to define a path in sources. This can be useful for
   // debugging against other applications.
   devtoolRoot: appName ? appName + ':///' : '',
-  // This prefix is not used for `standalone` builds.
+  // This prefix is not used for `independent` builds.
   filenamePrefix: appName ? appName + '.' : '',
 };

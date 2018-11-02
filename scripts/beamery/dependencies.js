@@ -1,8 +1,21 @@
 'use strict';
 
-const DEPENDENCIES = ['single-spa-react'];
+const DEPENDENCIES = [
+  // Single SPA
+  'single-spa-react',
+  // Testing
+  'enzyme-adapter-react-16',
+  'enzyme-to-json',
+  'enzyme',
+];
 
-const DEPENDENCIES_TYPES = DEPENDENCIES.concat(['@types/single-spa-react']);
+const DEPENDENCIES_TYPES = DEPENDENCIES.concat([
+  // Single SPA
+  '@types/single-spa-react',
+  // Testing
+  '@types/enzyme-adapter-react-16',
+  '@types/enzyme',
+]);
 
 const DEV_DEPENDENCIES = [
   // For Storybook
@@ -14,9 +27,12 @@ const DEV_DEPENDENCIES = [
   '@storybook/react',
   'babel-loader',
   'node-sass',
-  // For Stylelint
-  'stylelint-config-recommended',
+  // For linting
+  'stylelint-config-standard',
   'stylelint',
+  // For development workflow
+  'husky',
+  'lint-staged',
 ];
 
 const DEV_DEPENDENCIES_TYPES = DEV_DEPENDENCIES.concat([

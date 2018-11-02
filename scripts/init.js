@@ -96,16 +96,9 @@ module.exports = function(
 
   // Setup the script rules
   appPackage.scripts = {
-    start: 'BMR_ENV=development react-scripts start',
-    'start-standalone': 'react-scripts start',
-    storybook: 'start-storybook -p 3001',
-    build: 'BMR_ENV=production react-scripts build',
-    'build-dev': 'BMR_ENV=development react-scripts build',
-    'build-staging': 'BMR_ENV=staging react-scripts build',
-    'build-storybook': 'build-storybook',
+    start: 'react-scripts start',
+    build: 'react-scripts build',
     test: 'react-scripts test',
-    'test-coverage': 'react-scripts test --coverage',
-    'test-watch': 'react-scripts test --watch',
     eject: 'react-scripts eject',
   };
 
@@ -116,13 +109,6 @@ module.exports = function(
 
   // Setup the browsers list
   appPackage.browserslist = defaultBrowsers;
-
-  // bmr-react-scripts start
-  // Set the stylelint config.
-  appPackage.stylelint = {
-    extends: 'stylelint-config-recommended',
-  };
-  // bmr-react-scripts end
 
   fs.writeFileSync(
     path.join(appPath, 'package.json'),
@@ -211,7 +197,7 @@ module.exports = function(
     }
   }
 
-  beameryInit(appPackage, args, command, spawn, useTypeScript);
+  beameryInit(appPath, args, command, useTypeScript);
 
   if (useTypeScript) {
     verifyTypeScriptSetup();
@@ -243,9 +229,11 @@ module.exports = function(
   console.log('    Starts the development server.');
   console.log();
   console.log(
-    chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}start-standalone`)
+    chalk.cyan(
+      `  ${displayedCommand} ${useYarn ? '' : 'run '}start-independent`
+    )
   );
-  console.log('    Starts the development server in standalone mode.');
+  console.log('    Starts the development server in independent mode.');
   console.log();
   console.log(
     chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`)
@@ -268,7 +256,9 @@ module.exports = function(
   console.log('We suggest that you begin by typing:');
   console.log();
   console.log(chalk.cyan('  cd'), cdpath);
-  console.log(`  ${displayedCommand} ${useYarn ? '' : 'run '}start-standalone`);
+  console.log(
+    `  ${displayedCommand} ${useYarn ? '' : 'run '}start-independent`
+  );
   if (readmeExists) {
     console.log();
     console.log(
