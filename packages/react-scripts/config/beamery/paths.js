@@ -4,7 +4,7 @@ const ENVS = {
   DEVELOPMENT: 'development',
   PRODUCTION: 'production',
   STAGING: 'staging',
-  STANDALONE: 'standalone',
+  INDEPENDENT: 'independent',
 };
 
 const paths = {
@@ -23,7 +23,7 @@ switch (process.env.BMR_ENV) {
   case ENVS.DEVELOPMENT:
     paths.buildPath = '../../app-bath/dev';
     break;
-  case ENVS.STANDALONE:
+  case ENVS.INDEPENDENT:
   default:
     paths.appIndexJs = 'src/index';
     break;
