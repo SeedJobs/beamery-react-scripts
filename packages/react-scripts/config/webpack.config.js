@@ -34,6 +34,7 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 // @remove-on-eject-begin
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 // @remove-on-eject-end
+const beameryConfig = require('./beamery/webpack.config');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -161,23 +162,30 @@ module.exports = function(webpackEnv) {
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
       filename: isEnvProduction
-        ? 'static/js/[name].[chunkhash:8].js'
-        : isEnvDevelopment && 'static/js/bundle.js',
+        ? `static/js/${beameryConfig.filenamePrefix}[name].[chunkhash:8].js`
+        : isEnvDevelopment &&
+          `static/js/${beameryConfig.filenamePrefix}bundle.js`,
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction
-        ? 'static/js/[name].[chunkhash:8].chunk.js'
-        : isEnvDevelopment && 'static/js/[name].chunk.js',
+        ? `static/js/${
+            beameryConfig.filenamePrefix
+          }[name].[chunkhash:8].chunk.js`
+        : isEnvDevelopment &&
+          `static/js/${beameryConfig.filenamePrefix}[name].chunk.js`,
       // We inferred the "public path" (such as / or /my-project) from homepage.
       // We use "/" in development.
       publicPath: publicPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
+            beameryConfig.devtoolRoot +
             path
               .relative(paths.appSrc, info.absoluteResourcePath)
               .replace(/\\/g, '/')
         : isEnvDevelopment &&
-          (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+          beameryConfig.devtoolRoot +
+            (info =>
+              path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
     optimization: {
       minimize: isEnvProduction,
@@ -338,7 +346,9 @@ module.exports = function(webpackEnv) {
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
-                name: 'static/media/[name].[hash:8].[ext]',
+                name: `static/media/${
+                  beameryConfig.filenamePrefix
+                }[name].[hash:8].[ext]`,
               },
             },
             // Process application JS with Babel.
@@ -508,7 +518,9 @@ module.exports = function(webpackEnv) {
               // by webpacks internal loaders.
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
-                name: 'static/media/[name].[hash:8].[ext]',
+                name: `static/media/${
+                  beameryConfig.filenamePrefix
+                }[name].[hash:8].[ext]`,
               },
             },
             // ** STOP ** Are you adding a new loader?
@@ -581,8 +593,12 @@ module.exports = function(webpackEnv) {
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
-          filename: 'static/css/[name].[contenthash:8].css',
-          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+          filename: `static/css/${
+            beameryConfig.filenamePrefix
+          }[name].[contenthash:8].css`,
+          chunkFilename: `static/css/${
+            beameryConfig.filenamePrefix
+          }[name].[contenthash:8].chunk.css`,
         }),
       // Generate a manifest file which contains a mapping of all asset filenames
       // to their corresponding output file so that tools can pick it up without
