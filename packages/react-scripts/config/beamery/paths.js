@@ -8,7 +8,7 @@ const ENVS = {
 };
 
 const paths = {
-  buildPath: 'dist',
+  buildPath: '../app-bath/dev',
   publicPath: false,
   appIndexJs: 'src/index.full',
 };
