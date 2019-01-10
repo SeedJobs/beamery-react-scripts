@@ -18,6 +18,11 @@ const fs = require('fs');
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
 
+const writeToDisk =
+  process.env.BMR_ENV === 'development'
+    ? f => !f.includes('index.html')
+    : false;
+
 module.exports = function(proxy, allowedHost) {
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
@@ -61,7 +66,7 @@ module.exports = function(proxy, allowedHost) {
     // By default files from `contentBase` will not trigger a page reload.
     watchContentBase: true,
     // Write bundle to disk if development mode
-    writeToDisk: process.env.BMR_ENV === 'development' || false,
+    writeToDisk,
     // Enable hot reloading server. It will provide /sockjs-node/ endpoint
     // for the WebpackDevServer client so it can learn when the files were
     // updated. The WebpackDevServer client is included as an entry point
