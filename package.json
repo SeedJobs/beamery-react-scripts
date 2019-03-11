@@ -1,6 +1,6 @@
 {
   "name": "bmr-react-scripts",
-  "version": "0.0.11",
+  "version": "0.0.13",
   "workspaces": [
     "packages/*"
   ],
@@ -55,6 +55,7 @@
     ]
   },
   "dependencies": {
-    "cross-env": "^5.2.0"
+    "cross-env": "^5.2.0",
+    "webpack": "^4.29.6"
   }
 }
