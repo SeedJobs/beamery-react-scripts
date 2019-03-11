@@ -1,5 +1,6 @@
 {
-  "private": true,
+  "name": "bmr-react-scripts",
+  "version": "0.0.11",
   "workspaces": [
     "packages/*"
   ],
@@ -36,6 +37,7 @@
     "strip-ansi": "^4.0.0",
     "svg-term-cli": "^2.1.1",
     "tempy": "^0.2.1",
+    "react-scripts": "0.8.4",
     "wait-for-localhost": "2.0.1"
   },
   "husky": {
@@ -51,5 +53,8 @@
     "yarn.lock": [
       "git rm --cached"
     ]
+  },
+  "dependencies": {
+    "cross-env": "^5.2.0"
   }
 }
