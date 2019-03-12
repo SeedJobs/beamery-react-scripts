@@ -171,7 +171,7 @@ module.exports = function(webpackEnv) {
               ? ''
               : `.${process.env.CI_PIPELINE_ID || '[chunkhash:8]'}`
           }.bundle.js`
-        : isEnvDevelopment && `${beameryConfig.filenamePrefix}.bundle.js`,
+        : isEnvDevelopment && `${beameryConfig.filenamePrefix}.[name].bundle.js`,
       // There are also additional JS chunk files if you use code splitting.
       /* chunkFilename: isEnvProduction
         ? `static/js/[name].[chunkhash:8].chunk.js`
