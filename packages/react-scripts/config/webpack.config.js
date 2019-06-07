@@ -40,6 +40,10 @@ const postcssNormalize = require('postcss-normalize');
 
 const beameryConfig = require('./beamery/prefixes');
 const beameryAlias = require('./beamery/alias');
+const beameryEnvs = require('./beamery/envs');
+const isBeameryDev = process.env.BMR_ENV === beameryEnvs.DEVELOPMENT;
+const isBeameryStaging = process.env.BMR_ENV === beameryEnvs.STAGING;
+const gitCommitHash = isBeameryStaging ? require('child_process').execSync('git rev-parse HEAD').toString().trim() : null;
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -168,19 +172,24 @@ module.exports = function(webpackEnv) {
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
-      filename: isEnvProduction
-        ? `${beameryConfig.filenamePrefix}.[name]${
-            process.env.BMR_ENV === 'development'
-              ? ''
-              : `.${process.env.CI_PIPELINE_ID || '[chunkhash:8]'}`
-          }.bundle.js`
-        : isEnvDevelopment && `${beameryConfig.filenamePrefix}.[name].bundle.js`,
+      filename: (() => {
+        if (isEnvProduction) {
+          const hash = (() => {
+            if (isBeameryDev) return undefined;
+            if (isBeameryStaging) return gitCommitHash;
+            else return `${process.env.CI_PIPELINE_ID || '[chunkhash:8]'}`;
+          })();
+          return `${beameryConfig.filenamePrefix}.[name]${hash ? `.${hash}` : ''}.bundle.js`
+        } else if (isEnvDevelopment) {
+          return `${beameryConfig.filenamePrefix}.[name].bundle.js`
+        }
+      })(),
       // TODO: remove this when upgrading to webpack 5
       // futureEmitAssets: true,
       // There are also additional JS chunk files if you use code splitting.
-      /* chunkFilename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].chunk.js'
-        : isEnvDevelopment && 'static/js/[name].chunk.js', */
+      chunkFilename: isEnvProduction
+        ? `${beameryConfig.filenamePrefix}.[name].[contenthash:8].chunk.js`
+        : isEnvDevelopment && `${beameryConfig.filenamePrefix}.[name].chunk.js`,
       // We inferred the "public path" (such as / or /my-project) from homepage.
       // We use "/" in development.
       publicPath: publicPath,
@@ -197,7 +206,7 @@ module.exports = function(webpackEnv) {
             path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
     optimization: {
-      minimize: isEnvProduction && process.env.BMR_ENV !== 'development',
+      minimize: isEnvProduction && !isBeameryDev,
       minimizer: [
         // This is only used in production mode
         new TerserPlugin({
@@ -264,10 +273,14 @@ module.exports = function(webpackEnv) {
       // Automatically split vendor and commons
       // https://twitter.com/wSokra/status/969633336732905474
       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
-      /* splitChunks: {
+      splitChunks: isBeameryStaging ? {
+        cacheGroups: {
+          default: false,
+        },
+      } : {
         chunks: 'all',
         name: false,
-      }, */
+      },
       // Keep the runtime chunk seperated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
       // runtimeChunk: true,
