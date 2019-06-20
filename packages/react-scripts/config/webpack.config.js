@@ -278,7 +278,7 @@ module.exports = function(webpackEnv) {
           default: false,
         },
       } : {
-        chunks: 'all',
+        chunks: 'async',
         name: false,
       },
       // Keep the runtime chunk seperated to enable long term caching
