@@ -1,3 +1,8 @@
+/*
+ * NOTE: Please do not modify this file.
+ *
+ * This file is configured to work within Beamery's build system and modifying it may cause something to break.
+ */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
